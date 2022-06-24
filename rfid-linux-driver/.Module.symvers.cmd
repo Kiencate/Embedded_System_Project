@@ -1,1 +1,0 @@
-cmd_/home/kiencate/My_Linux_Driver/rfid-linux-driver/Module.symvers := sed 's/\.ko$$/\.o/' /home/kiencate/My_Linux_Driver/rfid-linux-driver/modules.order | scripts/mod/modpost -m -a  -o /home/kiencate/My_Linux_Driver/rfid-linux-driver/Module.symvers -e -i Module.symvers   -T -

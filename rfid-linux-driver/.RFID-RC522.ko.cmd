@@ -1,1 +1,0 @@
-cmd_/home/kiencate/My_Linux_Driver/rfid-linux-driver/RFID-RC522.ko := ld -r  -m elf_x86_64  --build-id=sha1  -T scripts/module.lds -o /home/kiencate/My_Linux_Driver/rfid-linux-driver/RFID-RC522.ko /home/kiencate/My_Linux_Driver/rfid-linux-driver/RFID-RC522.o /home/kiencate/My_Linux_Driver/rfid-linux-driver/RFID-RC522.mod.o;  true

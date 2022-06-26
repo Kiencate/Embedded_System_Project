@@ -1,15 +1,15 @@
 **Step by step:**
 
-  cd rc522-driver
+    cd rc522-driver
 
-  bash setup.sh
+    bash setup.sh
 
-  make
+    make
 
-  sudo insmod RFID-RC522.ko
+    sudo insmod RFID-RC522.ko
 
-  cd test/
+    cd test/
 
-  make 
+    make 
   
-  sudo ./
+    sudo ./test

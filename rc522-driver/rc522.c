@@ -340,12 +340,6 @@ static int RC522_init(void)
 static void RC522_exit(void)
 {
 	printk(KERN_DEBUG"module is removed\n");
-	/*flags = 0;*/
-
-	/*del_timer(&poll_timer);*/
-	/*flush_workqueue(rc522_wq);*/
-	/*destroy_workqueue(rc522_wq);*/
-	/*ifopen = 0;*/
 	spi_unregister_device(rc522_spi);
 	misc_deregister(&rc522_misc_device);
 }

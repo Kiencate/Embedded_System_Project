@@ -1,3 +1,3 @@
 #!/bin/bash
 dtc spidev_disabler.dts -O dtb >spidev_disabler.dtbo
-sudo dtoverlay -d . spidev_disabler
+dtoverlay -d . spidev_disabler

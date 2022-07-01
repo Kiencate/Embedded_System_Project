@@ -14,37 +14,45 @@ MODULE_DESCRIPTION("Driver control 2 servo");
 static dev_t my_device_nr;
 static struct class *my_class;
 static struct cdev my_device;
-static char cmd[20];
+static char cmd[2];
 #define DRIVER_NAME "2servo"
 #define DRIVER_CLASS "MyModuleClass"
 
 /* Variables for pwm  */
 struct pwm_device *pwm0 = NULL;
 struct pwm_device *pwm1 = NULL;
-u32 pwm_on_time = 1000000; // duty cycle = 5% when init 
+u32 pwm_0_degree = 1000000; // duty cycle = 5% 
 u32 period = 20000000;   // period = 20ms -> frequency = 50Hz
-
+u32 pwm_90_degree = 2000000; // duty cycle = 10% 
 
 static ssize_t driver_write(struct file *File, const char *user_buffer, size_t count, loff_t *offs) {
 	int to_copy, not_copied, delta;
 	char value;
-        long duty = 0;
 	/* Get amount of data to copy */
 	to_copy = min(count, sizeof(value));
-
-	/* Copy data to user */
+	/* Copy data from user */
 	not_copied = copy_from_user(cmd, user_buffer, count);
-	printk("buff: %s",cmd);
-	if (kstrtol(user_buffer + 2, 10, &duty) < 0) printk("can't convert");
-	else{
-	printk("value: %ld",duty);
-        if (duty>100000)
-	/* Set PWM on time */
-	pwm_config(pwm0, duty, 20000000);
-        }
+	if (strcmp(user_buffer,"00") == 0) {
+		pwm_config(pwm0, pwm_0_degree, period);
+		pwm_config(pwm1, pwm_0_degree, period);
+	}
+	else if(strcmp(user_buffer,"01") == 0)
+	{
+		pwm_config(pwm0, pwm_0_degree, period);
+		pwm_config(pwm1, pwm_90_degree, period);
+	}
+		else if(strcmp(user_buffer,"11") == 0)
+	{
+		pwm_config(pwm0, pwm_90_degree, period);
+		pwm_config(pwm1, pwm_90_degree, period);
+	}
+		else if(strcmp(user_buffer,"10") == 0)
+	{
+		pwm_config(pwm0, pwm_90_degree, period);
+		pwm_config(pwm1, pwm_0_degree, period);
+	}
 	/* Calculate data */
 	delta = to_copy - not_copied;
-
 	return delta;
 }
 
@@ -101,7 +109,7 @@ static int __init ModuleInit(void) {
 		printk("Could not get PWM0!\n");
 		goto AddError;
 	}
-	pwm_config(pwm0, pwm_on_time, period);
+	pwm_config(pwm0, pwm_0_degree, period);
 	pwm_enable(pwm0);
  	
 	pwm1 = pwm_request(1, "my-pwm");
@@ -110,7 +118,7 @@ static int __init ModuleInit(void) {
 		goto AddError;
 	}
 
-	pwm_config(pwm1, pwm_on_time, period);
+	pwm_config(pwm1, pwm_0_degree, period);
 	pwm_enable(pwm1);
 	return 0;
 AddError:

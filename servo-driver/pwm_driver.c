@@ -14,7 +14,7 @@ MODULE_DESCRIPTION("Driver control 2 servo");
 static dev_t my_device_nr;
 static struct class *my_class;
 static struct cdev my_device;
-
+static char cmd[20];
 #define DRIVER_NAME "2servo"
 #define DRIVER_CLASS "MyModuleClass"
 
@@ -33,8 +33,9 @@ static ssize_t driver_write(struct file *File, const char *user_buffer, size_t c
 	to_copy = min(count, sizeof(value));
 
 	/* Copy data to user */
-	not_copied = copy_from_user(&value, user_buffer, to_copy);
-	if (kstrtol(user_buffer, 10, &duty) < 0) printk("can't convert");
+	not_copied = copy_from_user(cmd, user_buffer, count);
+	printk("buff: %s",cmd);
+	if (kstrtol(user_buffer + 2, 10, &duty) < 0) printk("can't convert");
 	else{
 	printk("value: %ld",duty);
         if (duty>100000)
@@ -127,6 +128,8 @@ ClassError:
 static void __exit ModuleExit(void) {
 	pwm_disable(pwm0);
 	pwm_free(pwm0);
+	pwm_disable(pwm1);
+	pwm_free(pwm1);
 	cdev_del(&my_device);
 	device_destroy(my_class, my_device_nr);
 	class_destroy(my_class);

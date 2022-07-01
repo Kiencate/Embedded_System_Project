@@ -7,25 +7,24 @@
 
 /* Meta Information */
 MODULE_LICENSE("GPL");
-MODULE_AUTHOR("Johannes 4 GNU/Linux");
-MODULE_DESCRIPTION("A simple driver to access the Hardware PWM IP");
+MODULE_AUTHOR("Kien Truong Long");
+MODULE_DESCRIPTION("Driver control 2 servo");
 
 /* Variables for device and device class */
 static dev_t my_device_nr;
 static struct class *my_class;
 static struct cdev my_device;
 
-#define DRIVER_NAME "my_pwm_driver"
+#define DRIVER_NAME "2servo"
 #define DRIVER_CLASS "MyModuleClass"
 
 /* Variables for pwm  */
 struct pwm_device *pwm0 = NULL;
 struct pwm_device *pwm1 = NULL;
-u32 pwm_on_time = 1000000;
+u32 pwm_on_time = 1000000; // duty cycle = 5% when init 
+u32 period = 20000000;   // period = 20ms -> frequency = 50Hz
 
-/**
- * @brief Write data to buffer
- */
+
 static ssize_t driver_write(struct file *File, const char *user_buffer, size_t count, loff_t *offs) {
 	int to_copy, not_copied, delta;
 	char value;
@@ -38,7 +37,7 @@ static ssize_t driver_write(struct file *File, const char *user_buffer, size_t c
 	if (kstrtol(user_buffer, 10, &duty) < 0) printk("can't convert");
 	else{
 	printk("value: %ld",duty);
-        if (duty>1000)
+        if (duty>100000)
 	/* Set PWM on time */
 	pwm_config(pwm0, duty, 20000000);
         }
@@ -48,17 +47,11 @@ static ssize_t driver_write(struct file *File, const char *user_buffer, size_t c
 	return delta;
 }
 
-/**
- * @brief This function is called, when the device file is opened
- */
 static int driver_open(struct inode *device_file, struct file *instance) {
 	printk("dev_nr - open was called!\n");
 	return 0;
 }
 
-/**
- * @brief This function is called, when the device file is opened
- */
 static int driver_close(struct inode *device_file, struct file *instance) {
 	printk("dev_nr - close was called!\n");
 	return 0;
@@ -71,18 +64,15 @@ static struct file_operations fops = {
 	.write = driver_write
 };
 
-/**
- * @brief This function is called, when the module is loaded into the kernel
- */
 static int __init ModuleInit(void) {
 	printk("Hello, Kernel!\n");
 
 	/* Allocate a device nr */
 	if( alloc_chrdev_region(&my_device_nr, 0, 1, DRIVER_NAME) < 0) {
-		printk("Device Nr. could not be allocated!\n");
+		printk("Device could not be allocated!\n");
 		return -1;
 	}
-	printk("read_write - Device Nr. Major: %d, Minor: %d was registered!\n", my_device_nr >> 20, my_device_nr && 0xfffff);
+	printk("Device Major: %d, Minor: %d was registered!\n", my_device_nr >> 20, my_device_nr && 0xfffff);
 
 	/* Create device class */
 	if((my_class = class_create(THIS_MODULE, DRIVER_CLASS)) == NULL) {
@@ -104,22 +94,22 @@ static int __init ModuleInit(void) {
 		printk("Registering of device to kernel failed!\n");
 		goto AddError;
 	}
+
 	pwm0 = pwm_request(0, "my-pwm");
 	if(pwm0 == NULL) {
 		printk("Could not get PWM0!\n");
 		goto AddError;
 	}
-	printk("wtf");
-	pwm_config(pwm0, pwm_on_time, 20000000);
+	pwm_config(pwm0, pwm_on_time, period);
 	pwm_enable(pwm0);
  	
 	pwm1 = pwm_request(1, "my-pwm");
 	if(pwm1 == NULL) {
-		printk("Could not get PWM0!\n");
+		printk("Could not get PWM1!\n");
 		goto AddError;
 	}
 
-	pwm_config(pwm1, pwm_on_time, 20000000);
+	pwm_config(pwm1, pwm_on_time, period);
 	pwm_enable(pwm1);
 	return 0;
 AddError:

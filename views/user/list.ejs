@@ -1,0 +1,82 @@
+<!--
+including header content which is common for all pages
+-->
+<%- include ../layouts/header.ejs %> <% if (messages.error) { %>
+<p style="color: red"><%- messages.error %></p>
+<% } %> <% if (messages.success) { %>
+<p style="color: green"><%- messages.success %></p>
+<% } %>
+
+<div style="text-align: center">
+  <h1>Users List</h1>
+</div>
+
+<div class="mx-auto mt-4">
+  <table style="text-align: center" class="mx-auto" width="70%" border="1">
+    <tr style="text-align: center; background-color: rgb(77, 177, 77)">
+      <th>User Id</th>
+      <th>First Name</th>
+      <th>Last Name</th>
+      <th>Phone</th>
+      <th>Email</th>
+      <th>Action</th>
+      <th>Card Id</th>
+      <th>Balance</th>
+    </tr>
+
+    <!--
+		Using FOREACH LOOP for the user array
+		
+		myArray.forEach(function(el, index) {
+			// el - current element, i - index
+		});
+	-->
+    <% if (data) { %> <% data.forEach(function(user){ %>
+    <tr>
+      <td><%= user.Id %></td>
+      <td><%= user.firstName %></td>
+      <td><%= user.lastName %></td>
+      <td><%= user.phone %></td>
+      <td><%= user.email %></td>
+      <td><%= user.cardId%></td>
+      <td><%= user.balance %></td>
+      <td>
+        <div>
+          <form
+            method="get"
+            action="/user/edit/<%= user.Id %>"
+            style="float: left"
+          >
+            <input
+              type="submit"
+              name="edit"
+              value="Edit"
+              onClick="return confirm('Are you sure you want to edit?')"
+            />
+            <input type="hidden" name="_method" value="Edit" />
+          </form>
+        </div>
+        <div>
+          <form
+            method="post"
+            action="/user/delete/<%= user.Id %>"
+            style="float: left"
+          >
+            <input
+              type="submit"
+              name="delete"
+              value="Delete"
+              onClick="return confirm('Are you sure you want to delete?')"
+            />
+            <input type="hidden" name="_method" value="DELETE" />
+          </form>
+        </div>
+      </td>
+    </tr>
+    <% }) %> <% } %>
+  </table>
+</div>
+<!--
+including footer content which is common for all pages
+-->
+<%- include ../layouts/footer.ejs %>

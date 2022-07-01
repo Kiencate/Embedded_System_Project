@@ -1,10 +1,18 @@
-# Embedded_System_Project HUST Ph.D Pham Van Tien
-**ATM battery for electric bicycles, electric motorcycles**
+**Creating database and table**
 
-In  this project:
-    
-    Build rtlinux kernel for raspberry pi4
-    
-    Write rc522, servo, LCD driver for raspberry pi 4
-    
-    Build web api
+```
+create database test;
+
+use test;
+
+CREATE TABLE users (
+id int() NOT NULL auto_increment,
+name varchar(50) NOT NULL,
+phone varchar(10) NOT NULL,
+email varchar(50) NOT NULL,
+cardId varchar(50) NOT NULL UNIQUE,
+balance int,
+PRIMARY KEY (id)
+);
+
+

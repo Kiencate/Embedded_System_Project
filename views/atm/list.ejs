@@ -1,0 +1,31 @@
+<%- include ../layouts/header.ejs %>
+
+<div style="text-align: center">
+  <h1>ATM List</h1>
+</div>
+
+<!-- table -->
+<div class="mx-auto mt-4">
+  <table style="text-align: center" class="mx-auto" width="30%" border="1">
+    <tr style="text-align: center; background-color: rgb(77, 177, 77)">
+      <th>ATM ID</th>
+      <th>Location</th>
+    </tr>
+
+    <!--
+		Using FOREACH LOOP for the atm array
+		
+		myArray.forEach(function(el, index) {
+			// el - current element, i - index
+		});
+	  -->
+    <% if (data) { %> <% data.forEach(function(atm){ %>
+    <tr>
+      <td><%= atm.Id %></td>
+      <td><%= atm.Location %></td>
+    </tr>
+    <% }) %> <% } %>
+  </table>
+</div>
+
+<%- include ../layouts/footer.ejs %>

@@ -13,6 +13,7 @@ class ATM_Pins():
     servo = [1, 1]
     url = "http://10.133.161.237:4000/"
 
+    #doc the tu
     def Read_RFID(self):
         self.rfid = None
         dev = os.open("/dev/rfid_rc522_dev", os.O_RDONLY)
@@ -33,6 +34,7 @@ class ATM_Pins():
             print("deo on")
             self.check_card = False
 
+    #Hien thi LCD
     def Display_Lcd(self, text):
         dev = os.open(
             "/sys/devices/virtual/alphalcd/lcdi2c/clear", os.O_WRONLY)
@@ -45,7 +47,8 @@ class ATM_Pins():
         dev = os.open("/dev/lcdi2c", os.O_WRONLY)
         os.write(dev, bytes(text, 'utf-8'))
         os.close(dev)
-
+        
+    #Rotate servo
     def Rotate_Servo(self):
         mode = ''
         for i in range(self.max_pin_number):
@@ -54,6 +57,7 @@ class ATM_Pins():
         os.write(dev, bytes(mode, 'utf-8'))
         os.close(dev)
 
+    # Lay thong tin tu database
     def Get_info(self):
         try:
             response = requests.get(url=self.url+"user")
@@ -67,6 +71,7 @@ class ATM_Pins():
             print("no user")
             return 0
 
+    #thanh toan
     def Update_Balance(self):
         try:
             response = requests.put(
@@ -75,6 +80,7 @@ class ATM_Pins():
             print("no user")
             return True
 
+    #dinh danh
     def Identification(self):
         self.Read_RFID()
         if not self.check_card:
@@ -88,14 +94,14 @@ class ATM_Pins():
             return False
         else:
             return True
+    
     # kiem tra xem co pin nao trong ATM da day khong
-
     def Check_Pin_Available(self):
         for i in range(self.max_pin_number):
             if self.pins_stack[i] == 2:
                 return True
         return False
-
+    # kiem tra dung pin va phan tram pin con lai 
     def Check_pin_in_box(self, pin_number):
         return True
 
@@ -111,7 +117,7 @@ while 1:
             continue
         check = True
         for i in range(test.max_pin_number):
-            if test.pins_stack[i] == 0:  # don't have pin
+            if test.pins_stack[i] == 0:  # kiem tra xem co ngan nao trong khong
                 # open to push pin
                 test.servo[i] = 0
                 test.Rotate_Servo()
@@ -135,6 +141,7 @@ while 1:
                         time.sleep(3)
                         test.servo[i] = 1
                         test.Rotate_Servo()
+                        test.pins_stack[i] = 0
                         check = False
                 else:
                     #check fail
@@ -145,6 +152,7 @@ while 1:
                     time.sleep(3)
                     test.servo[i] = 1
                     test.Rotate_Servo()
+                    test.pins_stack[i] = 0
                     check = False
                 break
         if check:
@@ -157,5 +165,4 @@ while 1:
                     test.pins_stack[i] = 0
                     test.servo[i] = 1
                     test.Rotate_Servo()
-
         print("doi thanh cong")

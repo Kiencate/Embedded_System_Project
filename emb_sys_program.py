@@ -5,10 +5,11 @@ import time
 
 
 class ATM_Pins():
+    max_pin_number = 2
     rfid = None
     check_card = None
     usr_info = None
-    pins_stack = [1,0]
+    pins_stack = [2,0]
     servo = [1,1]
     url = "http://10.133.161.237:4000/"
 
@@ -46,7 +47,7 @@ class ATM_Pins():
 
     def Rotate_Servo(self):
         mode = ''
-        for i in range(2):
+        for i in range(self.max_pin_number):
             mode += str(self.servo[i]) 
         dev = os.open("/dev/2servo", os.O_WRONLY)
         os.write(dev, bytes(mode,'utf-8'))
@@ -71,7 +72,7 @@ class ATM_Pins():
                 url=self.url+"api/users?page=2", data=self.usr_info)
         except:
             print("no user")
-            return 0
+            return True
 
     def Identification(self):
         self.Read_RFID()
@@ -86,7 +87,14 @@ class ATM_Pins():
             return False
         else:
             return True
-
+    # kiem tra xem co pin nao trong ATM da day khong
+    def Check_Pin_Available(self):
+        for i in range(self.max_pin_number):
+            if self.pins_stack[i] == 2:
+                return True
+        return False
+    def Check_pin_in_box(self,pin_number):
+        pass
 
 test = ATM_Pins()
 test.Display_Lcd("Hello,\nPls insert card")
@@ -94,7 +102,10 @@ start = time.time()
 while 1:
     if (test.Identification()):
         # doi tra pin
-        for i in range(2):
+        if not test.Check_Pin_Available():
+            test.Display_Lcd("Sorry,\nNo pin available")
+            continue
+        for i in range(test.max_pin_number):
             if test.pins_stack[i] == 0: # don't have pin
                 # open to push pin
                 test.servo[i] = 1 
@@ -105,5 +116,19 @@ while 1:
                 #close to check pin
                 test.servo[i] =0
                 test.Rotate_Servo()
+                if test.Check_pin_in_box(i):
+                    if (test.Update_Balance()):
+                        test.Display_Lcd("Successfully,\nReceive new pin")
+                #check successfully
                 break
+        for i in range(test.max_pin_number):
+            if test.pins_stack[i] ==2:
+                #open for user receiving pin
+                test.servo[i] = 1
+                test.Rotate_Servo()
+                time.sleep(5)
+                test.pins_stack[i] = 0
+                test.servo[i] = 0
+                test.Rotate_Servo()
+            
         print("doi thanh cong")

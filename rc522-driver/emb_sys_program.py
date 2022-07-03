@@ -5,10 +5,12 @@ class ATM_Pins():
     rfid = None
     usr_info = None
     url = "http://10.133.161.237:4000/"
+    
     def Read_RFID(self):
         dev = os.open("/dev/rfid_rc522_dev", os.O_RDONLY)
         while (self.rfid != None and self.rfid !=0 ):
             self.rfid = os.read(dev,4)
+        print(self.rfid)
         os.close(dev)
     
     def Display_Lcd(self,text):
@@ -17,8 +19,8 @@ class ATM_Pins():
         os.close(dev)
     
     def Rotate_Servo(self,angle):
-        dev = os.open("dev/my_pwm_dev",os.O_WRONLY)
-        os.write(dev,angle)
+        dev = os.open("/dev/2servo",os.O_WRONLY)
+        os.write(dev,b'10')
         os.close(dev)
     def Get_info(self):
         try:

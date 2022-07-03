@@ -14,7 +14,10 @@ class ATM_Pins():
         os.close(dev)
     
     def Display_Lcd(self,text):
-        dev = os.open("dev/lcd",os.O_WRONLY)
+        dev = os.open("/sys/devices/virtual/alphalcd/lcdi2c/clear",os.O_WRONLY)
+        os.write(dev,b'1')
+        os.close(dev)
+        dev = os.open("/dev/lcdi2c",os.O_WRONLY)
         os.write(dev,text)
         os.close(dev)
     
@@ -44,5 +47,5 @@ class ATM_Pins():
 
 
 test = ATM_Pins()
-test.Get_info()          
+test.Display_Lcd("kienctae")        
 

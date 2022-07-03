@@ -177,7 +177,7 @@ static long lcdi2c_ioctl(struct file *file,
       break;
     case LCD_IOCTL_SETPOSITION:
       get_user(data->column, buffer);
-      get_user(data->row, buffer+1);
+      get_user(data->row, buffer+1);Unknown IOCTL
       lcdsetcursor(data, data->column, data->row);
       break;
     case LCD_IOCTL_RESET:
@@ -261,7 +261,7 @@ static int lcdi2c_probe(struct i2c_client *client, const struct i2c_device_id *i
     data->major = major;
 
     lcdinit(data, topo);
-    lcdprint(data, "Device Driver\nAuthor: Tuan");
+    lcdprint(data, "ATM pin\nHello");
 
     dev_info(&client->dev, "%ux%u LCD using bus 0x%X, at address 0x%X",
 	     data->organization.columns,
@@ -1250,6 +1250,7 @@ module_init(i2clcd857_init);
 module_exit(i2clcd857_exit);
 
 MODULE_LICENSE("GPL");
-MODULE_AUTHOR("TuanPhan");
-MODULE_DESCRIPTION("Driver for HD44780 LCD with PCF8574 I2C extension.");
-MODULE_VERSION("0.1.0");
+MODULE_AUTHOR("Kien Truong Long");
+MODULE_DESCRIPTION("Driver for HD44780 LCD 16x2 with PCF8574 I2C extension.");
+xMODULE_VERSION("0.1.0");
+ 

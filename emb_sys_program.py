@@ -10,6 +10,7 @@ class ATM_Pins():
     url = "http://10.133.161.237:4000/"
 
     def Read_RFID(self):
+        self.rfid = None
         dev = os.open("/dev/rfid_rc522_dev", os.O_RDONLY)
         while (self.rfid == b'' or self.rfid == None):
             self.rfid = os.read(dev, 4)
@@ -66,7 +67,7 @@ class ATM_Pins():
             return False
         else:
             #check data base and return check card (true or false)
-            pass
+            print("checking")
         if not self.check_card:
             self.Display_Lcd("Invalid user\n Pls try again!")
             return False

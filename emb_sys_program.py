@@ -44,7 +44,7 @@ class ATM_Pins():
         os.write(dev, bytes(text, 'utf-8'))
         os.close(dev)
 
-    def Rotate_Servo(self, mode):
+    def Rotate_Servo(self):
         mode = None
         for i in range(2):
             mode += str(self.servo[i]) 

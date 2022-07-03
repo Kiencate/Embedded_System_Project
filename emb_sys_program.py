@@ -8,8 +8,10 @@ class ATM_Pins():
     
     def Read_RFID(self):
         dev = os.open("/dev/rfid_rc522_dev", os.O_RDONLY)
-        while (self.rfid != None and self.rfid !=0 ):
+        while (self.rfid == None):
             self.rfid = os.read(dev,4)
+            if self.rfid == '':
+                print("deo on")
         print(self.rfid)
         os.close(dev)
     

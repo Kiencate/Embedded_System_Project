@@ -18,7 +18,7 @@ class ATM_Pins():
         os.write(dev,b'1')
         os.close(dev)
         dev = os.open("/dev/lcdi2c",os.O_WRONLY)
-        os.write(dev,text)
+        os.write(dev,bytes(text))
         os.close(dev)
     
     def Rotate_Servo(self,angle):

@@ -11,15 +11,15 @@ class ATM_Pins():
 
     def Read_RFID(self):
         dev = os.open("/dev/rfid_rc522_dev", os.O_RDONLY)
-        while (self.rfid == None):
+        while (self.rfid == b'' or self.rfid == None):
             self.rfid = os.read(dev, 4)
-        if self.rfid != b'':
-            self.check_card = True
-        else:
-            self.check_card = False
-        print(self.rfid)
         os.close(dev)
-
+        try:
+            print(int(self.rfid[0]))
+            self.check_card = True
+        except:
+            self.check_card = False
+        
     def Display_Lcd(self, text):
         dev = os.open(
             "/sys/devices/virtual/alphalcd/lcdi2c/clear", os.O_WRONLY)

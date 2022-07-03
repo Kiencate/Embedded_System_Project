@@ -9,8 +9,8 @@ class ATM_Pins():
     rfid = None
     check_card = None
     usr_info = None
-    pins_stack = [2,0]
-    servo = [1,1]
+    pins_stack = [2, 0]
+    servo = [1, 1]
     url = "http://10.133.161.237:4000/"
 
     def Read_RFID(self):
@@ -25,7 +25,8 @@ class ATM_Pins():
                 start = time_out
         os.close(dev)
         try:
-            self.rfid = str(int(self.rfid[0]))+','+str(int(self.rfid[1]))+','+str(int(self.rfid[2]))+','+str(int(self.rfid[3]))
+            self.rfid = str(int(self.rfid[0]))+','+str(int(self.rfid[1])) + \
+                ','+str(int(self.rfid[2]))+','+str(int(self.rfid[3]))
             print(self.rfid)
             self.check_card = True
         except:
@@ -48,9 +49,9 @@ class ATM_Pins():
     def Rotate_Servo(self):
         mode = ''
         for i in range(self.max_pin_number):
-            mode += str(self.servo[i]) 
+            mode += str(self.servo[i])
         dev = os.open("/dev/2servo", os.O_WRONLY)
-        os.write(dev, bytes(mode,'utf-8'))
+        os.write(dev, bytes(mode, 'utf-8'))
         os.close(dev)
 
     def Get_info(self):
@@ -88,13 +89,16 @@ class ATM_Pins():
         else:
             return True
     # kiem tra xem co pin nao trong ATM da day khong
+
     def Check_Pin_Available(self):
         for i in range(self.max_pin_number):
             if self.pins_stack[i] == 2:
                 return True
         return False
-    def Check_pin_in_box(self,pin_number):
+
+    def Check_pin_in_box(self, pin_number):
         return True
+
 
 test = ATM_Pins()
 test.Display_Lcd("Hello,\nPls insert card")
@@ -105,30 +109,53 @@ while 1:
         if not test.Check_Pin_Available():
             test.Display_Lcd("Sorry,\nNo pin available")
             continue
+        check = True
         for i in range(test.max_pin_number):
-            if test.pins_stack[i] == 0: # don't have pin
+            if test.pins_stack[i] == 0:  # don't have pin
                 # open to push pin
-                test.servo[i] = 1 
+                test.servo[i] = 0
                 test.Rotate_Servo()
-                #user push pin
+                # user push pin
                 time.sleep(3)
-                test.pins_stack[i]=1
-                #close to check pin
-                test.servo[i] =0
+                test.pins_stack[i] = 1
+                # close to check pin
+                test.servo[i] = 1
                 test.Rotate_Servo()
                 if test.Check_pin_in_box(i):
                     if (test.Update_Balance()):
+                        #pay successfully
                         test.Display_Lcd("Successfully,\nReceive new pin")
-                #check successfully
+                        test.pins_stack[i]=1
+                    else:
+                        #pay fail
+                        test.Display_Lcd("Pay false,\nReceive old pin")
+                        #return old pin
+                        test.servo[i] = 0
+                        test.Rotate_Servo()
+                        time.sleep(3)
+                        test.servo[i] = 1
+                        test.Rotate_Servo()
+                        check = False
+                else:
+                    #check fail
+                    test.Display_Lcd("Check pin false,\nReceive old pin")
+                    #return old pin
+                    test.servo[i] = 0
+                    test.Rotate_Servo()
+                    time.sleep(3)
+                    test.servo[i] = 1
+                    test.Rotate_Servo()
+                    check = False
                 break
-        for i in range(test.max_pin_number):
-            if test.pins_stack[i] ==2:
-                #open for user receiving pin
-                test.servo[i] = 1
-                test.Rotate_Servo()
-                time.sleep(5)
-                test.pins_stack[i] = 0
-                test.servo[i] = 0
-                test.Rotate_Servo()
-            
+        if check:
+            for i in range(test.max_pin_number):
+                if test.pins_stack[i] == 2:
+                    # open for user receiving pin
+                    test.servo[i] = 0
+                    test.Rotate_Servo()
+                    time.sleep(5)
+                    test.pins_stack[i] = 0
+                    test.servo[i] = 1
+                    test.Rotate_Servo()
+
         print("doi thanh cong")

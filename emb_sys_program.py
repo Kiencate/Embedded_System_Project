@@ -19,11 +19,12 @@ class ATM_Pins():
             time_out = time.time()
             if time_out-start > 5:
                 self.Display_Lcd("Hello,\nPls insert card")
+                start = time_out
         os.close(dev)
         try:
             self.rfid = str(int(self.rfid[0]))+','+str(int(self.rfid[1]))+','+str(int(self.rfid[2]))+','+str(int(self.rfid[3]))
             print(self.rfid)
-            self.check_card = True
+            self.check_card = False
         except:
             print("deo on")
             self.check_card = False
@@ -89,4 +90,3 @@ while 1:
     if (test.Identification()):
         # doi tra pin
         print("doi thanh cong")
-        

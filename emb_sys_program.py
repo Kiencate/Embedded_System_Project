@@ -8,6 +8,8 @@ class ATM_Pins():
     rfid = None
     check_card = None
     usr_info = None
+    pins_stack = [1,0]
+    servo = [1,1]
     url = "http://10.133.161.237:4000/"
 
     def Read_RFID(self):
@@ -24,7 +26,7 @@ class ATM_Pins():
         try:
             self.rfid = str(int(self.rfid[0]))+','+str(int(self.rfid[1]))+','+str(int(self.rfid[2]))+','+str(int(self.rfid[3]))
             print(self.rfid)
-            self.check_card = False
+            self.check_card = True
         except:
             print("deo on")
             self.check_card = False
@@ -42,9 +44,12 @@ class ATM_Pins():
         os.write(dev, bytes(text, 'utf-8'))
         os.close(dev)
 
-    def Rotate_Servo(self, angle):
+    def Rotate_Servo(self, mode):
+        mode = None
+        for i in range(2):
+            mode += str(self.servo[i]) 
         dev = os.open("/dev/2servo", os.O_WRONLY)
-        os.write(dev, b'10')
+        os.write(dev, bytes(mode,'utf-8'))
         os.close(dev)
 
     def Get_info(self):
@@ -89,4 +94,12 @@ start = time.time()
 while 1:
     if (test.Identification()):
         # doi tra pin
+        for i in range(2):
+            if test.pins_stack[i] == 0: # don't have pin
+                test.servo[i] = 1 # open to push pin
+                test.Rotate_Servo()
+                time.sleep(3)
+                test.servo[i] =0
+                test.Rotate_Servo()
+                break
         print("doi thanh cong")

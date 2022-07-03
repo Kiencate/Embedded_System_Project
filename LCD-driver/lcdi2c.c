@@ -6,8 +6,8 @@
 static uint busno = 1;      //I2C Bus number
 static uint address = DEFAULT_CHIP_ADDRESS; //Device address
 static uint topo = LCD_DEFAULT_ORGANIZATION;
-static uint cursor = 1;
-static uint blink = 1;
+static uint cursor = 0;
+static uint blink = 0;
 static IOCTLDescription_t ioctls[] = {
   { .ioctlcode = LCD_IOCTL_GETCHAR, .name = "GETCHAR", },
   { .ioctlcode = LCD_IOCTL_SETCHAR, .name = "SETCHAR", },

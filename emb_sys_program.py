@@ -18,6 +18,7 @@ class ATM_Pins():
             print(int(self.rfid[0]))
             self.check_card = True
         except:
+            print("deo on")
             self.check_card = False
         
     def Display_Lcd(self, text):

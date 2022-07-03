@@ -3,6 +3,7 @@ from urllib import response
 import requests
 import time
 
+
 class ATM_Pins():
     rfid = None
     check_card = None
@@ -16,12 +17,13 @@ class ATM_Pins():
             self.rfid = os.read(dev, 4)
         os.close(dev)
         try:
-            print(int(self.rfid[0]))
+            self.rfid = str(int(self.rfid[0]))+','+str(int(self.rfid[1]))+','+str(int(self.rfid[2]))+','+str(int(self.rfid[3]))
+            print(self.rfid)
             self.check_card = True
         except:
             print("deo on")
             self.check_card = False
-        
+
     def Display_Lcd(self, text):
         dev = os.open(
             "/sys/devices/virtual/alphalcd/lcdi2c/clear", os.O_WRONLY)
@@ -60,13 +62,14 @@ class ATM_Pins():
         except:
             print("no user")
             return 0
+
     def Identification(self):
         self.Read_RFID()
         if not self.check_card:
             self.Display_Lcd("Invalid card num\n Pls try again!")
             return False
         else:
-            #check data base and return check card (true or false)
+            # check data base and return check card (true or false)
             print("checking")
         if not self.check_card:
             self.Display_Lcd("Invalid user\n Pls try again!")
@@ -80,7 +83,7 @@ test.Display_Lcd("Hello,\nPls insert card")
 start = time.time()
 while 1:
     if (test.Identification()):
-        ## doi tra pin
+        # doi tra pin
         print("doi thanh cong")
         pass
     else:
@@ -88,7 +91,3 @@ while 1:
         if time_out - start > 5:
             test.Display_Lcd("Hello,\nPls insert card")
             start = time_out
-
-    
-
-

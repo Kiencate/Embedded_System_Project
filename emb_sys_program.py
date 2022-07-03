@@ -96,9 +96,13 @@ while 1:
         # doi tra pin
         for i in range(2):
             if test.pins_stack[i] == 0: # don't have pin
-                test.servo[i] = 1 # open to push pin
+                # open to push pin
+                test.servo[i] = 1 
                 test.Rotate_Servo()
+                #user push pin
                 time.sleep(3)
+                test.pins_stack[i]=1
+                #close to check pin
                 test.servo[i] =0
                 test.Rotate_Servo()
                 break

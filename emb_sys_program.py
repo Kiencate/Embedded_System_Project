@@ -94,7 +94,7 @@ class ATM_Pins():
                 return True
         return False
     def Check_pin_in_box(self,pin_number):
-        pass
+        return True
 
 test = ATM_Pins()
 test.Display_Lcd("Hello,\nPls insert card")

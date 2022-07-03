@@ -1,33 +1,38 @@
 import os
-from urllib import response   
-import requests             
+from urllib import response
+import requests
+
+
 class ATM_Pins():
     rfid = None
     usr_info = None
     url = "http://10.133.161.237:4000/"
-    
+
     def Read_RFID(self):
         dev = os.open("/dev/rfid_rc522_dev", os.O_RDONLY)
-        while (self.rfid == None or self.rfid == b''):
-            self.rfid = os.read(dev,4)
-        print(self.rfid)
+        while (self.rfid == None):
+            self.rfid = os.read(dev, 4)
+        print(int(self.rfid[0]))
         os.close(dev)
-    
-    def Display_Lcd(self,text):
-        dev = os.open("/sys/devices/virtual/alphalcd/lcdi2c/clear",os.O_WRONLY)
-        os.write(dev,b'1')
+
+    def Display_Lcd(self, text):
+        dev = os.open(
+            "/sys/devices/virtual/alphalcd/lcdi2c/clear", os.O_WRONLY)
+        os.write(dev, b'1')
         os.close(dev)
-        dev = os.open("/sys/devices/virtual/alphalcd/lcdi2c/position",os.O_WRONLY)
-        os.write(dev,b'11')
+        dev = os.open(
+            "/sys/devices/virtual/alphalcd/lcdi2c/position", os.O_WRONLY)
+        os.write(dev, b'11')
         os.close(dev)
-        dev = os.open("/dev/lcdi2c",os.O_WRONLY)
-        os.write(dev,bytes(text,'utf-8'))
+        dev = os.open("/dev/lcdi2c", os.O_WRONLY)
+        os.write(dev, bytes(text, 'utf-8'))
         os.close(dev)
-    
-    def Rotate_Servo(self,angle):
-        dev = os.open("/dev/2servo",os.O_WRONLY)
-        os.write(dev,b'10')
+
+    def Rotate_Servo(self, angle):
+        dev = os.open("/dev/2servo", os.O_WRONLY)
+        os.write(dev, b'10')
         os.close(dev)
+
     def Get_info(self):
         try:
             response = requests.get(url=self.url+"user")
@@ -40,17 +45,17 @@ class ATM_Pins():
         except:
             print("no user")
             return 0
+
     def Update_Balance(self):
         try:
-            response = requests.put(url=self.url+"api/users?page=2",data=self.usr_info)
+            response = requests.put(
+                url=self.url+"api/users?page=2", data=self.usr_info)
         except:
             print("no user")
             return 0
-    
 
 
 test = ATM_Pins()
-test.Display_Lcd("Hello,\nPls insert tag")  
-
-
+test.Display_Lcd("Hello,\nPls insert tag")
+test.Read_RFID()
 

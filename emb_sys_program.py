@@ -13,8 +13,12 @@ class ATM_Pins():
     def Read_RFID(self):
         self.rfid = None
         dev = os.open("/dev/rfid_rc522_dev", os.O_RDONLY)
+        start = time.time()
         while (self.rfid == b'' or self.rfid == None):
             self.rfid = os.read(dev, 4)
+            time_out = time.time()
+            if time_out-start > 5:
+                self.Display_Lcd("Hello,\nPls insert card")
         os.close(dev)
         try:
             self.rfid = str(int(self.rfid[0]))+','+str(int(self.rfid[1]))+','+str(int(self.rfid[2]))+','+str(int(self.rfid[3]))
@@ -66,7 +70,7 @@ class ATM_Pins():
     def Identification(self):
         self.Read_RFID()
         if not self.check_card:
-            self.Display_Lcd("Invalid card num\n Pls try again!")
+            self.Display_Lcd("Invalid card\n Pls try again!")
             return False
         else:
             # check data base and return check card (true or false)
@@ -85,9 +89,4 @@ while 1:
     if (test.Identification()):
         # doi tra pin
         print("doi thanh cong")
-        pass
-    else:
-        time_out = time.time()
-        if time_out - start > 5:
-            test.Display_Lcd("Hello,\nPls insert card")
-            start = time_out
+        

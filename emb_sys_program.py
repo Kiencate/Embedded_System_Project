@@ -19,6 +19,8 @@ class ATM_Pins():
         os.close(dev)
         dev = os.open("/dev/lcdi2c",os.O_WRONLY)
         os.write(dev,bytes(text1,'utf-8'))
+        os.close(dev)
+        dev = os.open("/dev/lcdi2c",os.O_WRONLY)
         os.write(dev,bytes(text2,'utf-8'))
         os.close(dev)
     

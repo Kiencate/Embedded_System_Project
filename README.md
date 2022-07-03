@@ -1,10 +1,11 @@
-# Embedded_System_Project HUST Ph.D Pham Van Tien
-**ATM battery for electric bicycles, electric motorcycles**
+# EMBEDDED SYSTEM PROJECT HUST
 
-In  this project:
-    
-    Build rtlinux kernel for raspberry pi4
-    
-    Write rc522, servo, LCD driver for raspberry pi 4
-    
-    Build web api
+In this project, we do:
+
+******Buiding Preempt-RT Linux kernel for raspberry pi 4.
+
+******Cross-compiling RFID-RC522, LCD, and Servo driver modules for raspberry pi 4.
+
+******Building database and web API for the system.
+
+******Writing main program for the system.

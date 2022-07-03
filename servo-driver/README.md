@@ -10,7 +10,8 @@ dtoverlay=pwm-2chan,pin=18,func=2,pin2=19,func2=2
 ```
 save file
 then:
-```bash  
+```bash 
+cd 
 echo "sudo insmod /home/pi/Embedded_System_Project/servo-driver/servo_driver.ko" >> .bashrc
 sudo reboot
 ```

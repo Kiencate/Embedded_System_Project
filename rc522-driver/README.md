@@ -17,8 +17,9 @@ add new line:
 ```bash  
 dtoverlay=spidev_disabler
 ```
-then:
-```bash  
+save file then:
+```bash
+cd  
 echo "sudo insmod /home/pi/Embedded_System_Project/rc522-driver/RFID-RC522.ko" >> .bashrc
 sudo reboot
 ```

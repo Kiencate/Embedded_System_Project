@@ -13,12 +13,13 @@ class ATM_Pins():
         print(self.rfid)
         os.close(dev)
     
-    def Display_Lcd(self,text):
+    def Display_Lcd(self,text1,text2):
         dev = os.open("/sys/devices/virtual/alphalcd/lcdi2c/clear",os.O_WRONLY)
         os.write(dev,b'1')
         os.close(dev)
         dev = os.open("/dev/lcdi2c",os.O_WRONLY)
-        os.write(dev,bytes(text))
+        os.write(dev,bytes(text1,'utf-8'))
+        os.write(dev,bytes(text2,'utf-8'))
         os.close(dev)
     
     def Rotate_Servo(self,angle):
@@ -47,5 +48,5 @@ class ATM_Pins():
 
 
 test = ATM_Pins()
-test.Display_Lcd("kienctae")        
+test.Display_Lcd("Hello","Pls insert tag")        
 

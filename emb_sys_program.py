@@ -1,7 +1,10 @@
 import os
 from urllib import response
+from fastapi import FastAPI
 import requests
 import time
+import json
+import random
 
 
 class ATM_Pins():
@@ -9,9 +12,10 @@ class ATM_Pins():
     rfid = None
     check_card = None
     usr_info = None
+    pin_capacity = 0
     pins_stack = [2, 0]
     servo = [1, 1]
-    url = "http://10.133.161.237:4000/"
+    url = "http://192.168.185.225:4000/"
 
     #doc the tu
     def Read_RFID(self):
@@ -31,7 +35,6 @@ class ATM_Pins():
             print(self.rfid)
             self.check_card = True
         except:
-            print("deo on")
             self.check_card = False
 
     #Hien thi LCD
@@ -60,50 +63,68 @@ class ATM_Pins():
     # Lay thong tin tu database
     def Get_info(self):
         try:
-            response = requests.get(url=self.url+"user")
+            response = requests.get(url=self.url+"users/"+str(self.rfid))
             print(response)
             if response.status_code == 200:
-                self.usr_info = response
-                print("get info successfuly")
+                self.usr_info = json.loads(response._content.decode("utf-8"))
+                print(self.usr_info)
+                self.check_card = True
             else:
+                self.check_card = False
                 print("get info fail")
         except:
+            self.check_card = False
             print("no user")
-            return 0
+            
 
     #thanh toan
     def Update_Balance(self):
+        self.usr_info["data"]["balance"] -= (100-self.pin_capacity)*100
         try:
-            response = requests.put(
-                url=self.url+"api/users?page=2", data=self.usr_info)
+            response = requests.put(url=self.url+"users/update",data={"cardId":self.usr_info["data"]["cardId"],"balance":self.usr_info["data"]["balance"]})
+            if response.status_code == 200:
+                self.usr_info = response._content.decode("utf-8")
+                print("Update successfully")
+                return True
+            else:
+                print("Update fail")
+                return False         
         except:
-            print("no user")
-            return True
+            print("Update fail")
+            return False
+            
 
-    #dinh danh
+    #Identification
     def Identification(self):
         self.Read_RFID()
         if not self.check_card:
             self.Display_Lcd("Invalid card\n Pls try again!")
             return False
         else:
-            # check data base and return check card (true or false)
-            print("checking")
+            # check data base and return check card (true or false)  
+            self.Get_info()
+         
         if not self.check_card:
             self.Display_Lcd("Invalid user\n Pls try again!")
             return False
         else:
             return True
     
-    # kiem tra xem co pin nao trong ATM da day khong
+    # check if having full power battery in ATM
     def Check_Pin_Available(self):
         for i in range(self.max_pin_number):
             if self.pins_stack[i] == 2:
                 return True
         return False
-    # kiem tra dung pin va phan tram pin con lai 
+    # check 
     def Check_pin_in_box(self, pin_number):
-        return True
+        # authenic pin
+        if 1:
+            self.pin_capacity = random.randint(0,70)
+            return True
+        else:
+            return False
+        
 
 
 test = ATM_Pins()
@@ -131,7 +152,6 @@ while 1:
                     if (test.Update_Balance()):
                         #pay successfully
                         test.Display_Lcd("Successfully,\nReceive new pin")
-                        test.pins_stack[i]=1
                     else:
                         #pay fail
                         test.Display_Lcd("Pay false,\nReceive old pin")
@@ -166,3 +186,8 @@ while 1:
                     test.servo[i] = 1
                     test.Rotate_Servo()
         print("doi thanh cong")
+test.rfid = "20182843"
+test.Get_info()
+test.Check_pin_in_box(12)
+test.Update_Balance()
+

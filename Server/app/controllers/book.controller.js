@@ -33,3 +33,7 @@ exports.update_book = function (req, res) {
         res.send({ result: response });
     });
 }
+{
+    "cardid":12
+    "balance":200000
+}

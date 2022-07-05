@@ -1,0 +1,51 @@
+<!--
+including header content which is common for all pages
+-->
+<%- include ../layouts/header.ejs %> <% if (messages.error) { %>
+<p style="color: red"><%- messages.error %></p>
+<% } %> <% if (messages.success) { %>
+<p style="color: green"><%- messages.success %></p>
+<% } %>
+
+<div style="text-align: center">
+  <h1>Add New User</h1>
+</div>
+
+<div class="mt-4">
+  <form class="" action="/user/add" method="post" name="form1">
+    <table style="text-align: center" class="mx-auto" width="30%" border="0">
+      <tr>
+        <td style="text-align: left">First Name</td>
+        <td><input type="text" name="firstName" id="firstName" value="<%= firstName %>" /></td>
+      </tr>
+      <tr>
+        <td style="text-align: left">Last Name</td>
+        <td><input type="text" name="lastName" id="lastName" value="<%= lastName %>" /></td>
+      </tr>
+      <tr>
+        <td style="text-align: left">Phone</td>
+        <td><input type="text" name="phone" value="<%= phone %>" /></td>
+      </tr>
+      <tr>
+        <td style="text-align: left">Email</td>
+        <td><input type="text" name="email" value="<%= email %>" /></td>
+      </tr>
+      <tr>
+        <td style="text-align: left">Card ID</td>
+        <td><input type="text" name="cardId" value="<%= cardId %>" /></td>
+      </tr>
+      <tr>
+        <td style="text-align: left">Balance</td>
+        <td><input type="text" name="balance" value="<%= balance %>" /></td>
+      </tr>
+      <tr>
+        <td></td>
+        <td><input type="submit" name="Submit" value="Add" /></td>
+      </tr>
+    </table>
+  </form>
+</div>
+<!--
+including footer content which is common for all pages
+-->
+<%- include ../layouts/footer.ejs %>

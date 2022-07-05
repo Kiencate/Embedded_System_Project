@@ -8,7 +8,7 @@ app.get("/", function (req, res) {
       "SELECT * FROM user ORDER BY Id ASC",
       function (error, results, fields) {
         if (error) throw error;
-        return res.status(400).send({
+        return res.send({
           message: "Users List",
           data: results,
         });
@@ -20,41 +20,57 @@ app.get("/", function (req, res) {
 //show json user by cardId
 app.get("/:cardId", function (req, res) {
   req.getConnection(function (error, conn) {
-    if (!req.params.cardId) {
-      return res.status(400).send({ error: true, message: "Please Provide Card Id" });
-    }
     conn.query(
       "SELECT * FROM user WHERE cardId=?",
       req.params.cardId,
       function (error, results, fields) {
         if (error) throw error;
-        return res.send({
-          message: "user",
-          data: results[0],
-        });
+
+        if (!req.params.cardId) {
+          res.status(400).send({
+            message: "user not found with cardId = " + req.params.cardId,
+          });
+        } else {
+          return res.send({
+            message: "user with cardId = " + req.params.cardId,
+            data: results[0],
+          });
+        }
       }
     );
   });
 });
 
-app.put("/update/:cardId", function (req, res) {
-  let cardId = req.params.cardId;
-  if (!cardId) {
-    return res
-      .status(400)
-      .send({ error: cardId, message: "Please provide Card Id for update" });
-  }
-  conn.query(
-    "UPDATE user.balance SET user = ? WHERE id = ?",
-    cardId,
-    function (error, results, fields) {
-      if (error) throw error;
-      return res.send({
-        data: results,
-        message: "user has been updated balance successfully.",
-      });
-    }
-  );
+// update balance
+app.put("/update", function (req, res) {
+  // req.send({ message: "balance = "+req.body.balance, });
+  console.log("he");
+  // var user = {
+  //   balance: req.sanitize("balance").escape().trim(),
+  // };
+
+  req.getConnection(function (error, conn) {
+    conn.query(
+      "UPDATE user SET balance =? WHERE cardId =?",
+      [req.body.balance, req.body.cardId],
+
+      function (error, results) {
+        console.log("ok");
+        if (error) throw error;
+
+        if (!req.body.cardId) {
+          return res.status(400).send({
+            message: "Please provide Card Id for update balance",
+          });
+        } else {
+          return res.send({
+            message: "Balance has been updated successfully.",
+            data: results,
+          });
+        }
+      }
+    );
+  });
 });
 
 module.exports = app;

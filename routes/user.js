@@ -257,12 +257,9 @@ app.put("/edit/(:Id)", function (req, res, next) {
 
 // DELETE USER
 app.delete("/delete/(:Id)", function (req, res, next) {
-  var user = { Id: req.params.Id };
-
   req.getConnection(function (error, conn) {
     conn.query(
       "DELETE FROM user WHERE Id = " + req.params.Id,
-      user,
       function (err, result) {
         //if(err) throw err
         if (err) {

@@ -736,7 +736,7 @@ static int __init i2clcd857_init(void)
     adapter = i2c_get_adapter(busno);
     if (!adapter) return -EINVAL;
 
-     client = i2c_new_client_device(adapter, &board_info);
+     client = i2c_new_device(adapter, &board_info);
      if (!client) return -EINVAL;
 
     ret = i2c_add_driver(&lcdi2c_driver);

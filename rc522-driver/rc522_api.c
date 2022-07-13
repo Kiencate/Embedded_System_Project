@@ -239,13 +239,13 @@ char PcdReset(void)
 	WriteRawRC(CommandReg,PCD_RESETPHASE);
 	delay_ns(10);
     // printk("pcd ok\n");
-	WriteRawRC(ModeReg,0x3D);            //��Mifare��ͨѶ��CRC��ʼֵ0x6363
+	WriteRawRC(ModeReg,0x3D);            
 	WriteRawRC(TReloadRegL,30);           
 	WriteRawRC(TReloadRegH,0);
 	WriteRawRC(TModeReg,0x8D);
 	WriteRawRC(TPrescalerReg,0x3E);
 
-	WriteRawRC(TxAutoReg,0x40);//����Ҫ
+	WriteRawRC(TxAutoReg,0x40);
 
 	return MI_OK;
 }

@@ -82,13 +82,13 @@ static char rc522_loop_work(uchar opnd)
 	char status;
 
 	PcdReset();
-	status=PcdRequest(PICC_REQIDL,&RevBuffer[0]);//Ñ°ÌìÏßÇøÄÚÎ´½øÈëÐÝÃß×´Ì¬µÄ¿¨£¬·µ»Ø¿¨Æ¬ÀàÐÍ 2×Ö½Ú
+	status=PcdRequest(PICC_REQIDL,&RevBuffer[0]);
 	if(status!=MI_OK)
 	{
 		printk(KERN_DEBUG"search card: no card\n");
 		return -EFAULT;
 	}
-	status=PcdAnticoll(&RevBuffer[2]);//·À³å×²£¬·µ»Ø¿¨µÄÐòÁÐºÅ 4×Ö½Ú
+	status=PcdAnticoll(&RevBuffer[2]);
 	if(status!=MI_OK)
 	{
 		printk(KERN_DEBUG"get card nu: no number\n");
@@ -96,7 +96,7 @@ static char rc522_loop_work(uchar opnd)
 	} 
 	memcpy(MLastSelectedSnr,&RevBuffer[2],4);
 
-	status=PcdSelect(MLastSelectedSnr);//Ñ¡¿¨
+	status=PcdSelect(MLastSelectedSnr);
 	if(status!=MI_OK)
 	{
 		printk(KERN_DEBUG"select card: no card\n");
@@ -106,7 +106,7 @@ static char rc522_loop_work(uchar opnd)
 		PcdHalt();	
 		return 0;	
 	}
-	else if (opnd == READ_CARD) {//¶Á¿¨
+	else if (opnd == READ_CARD) {
 		status=PcdAuthState(PICC_AUTHENT1A,KuaiN,PassWd,MLastSelectedSnr);
 		if(status!=MI_OK)
 		{
@@ -128,7 +128,7 @@ static char rc522_loop_work(uchar opnd)
 			}
 			printk(KERN_DEBUG"\n");
 		}
-	} else if (opnd == CHANGE_KEY) {//ÐÞ¸ÄÃÜÂë
+	} else if (opnd == CHANGE_KEY) {
 		status=PcdAuthState(PICC_AUTHENT1A,KuaiN,PassWd,MLastSelectedSnr);
 		if(status!=MI_OK)
 		{

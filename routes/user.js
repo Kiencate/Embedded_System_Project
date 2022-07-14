@@ -3,41 +3,51 @@ var app = express();
 
 // SHOW LIST OF USER
 app.get("/", function (req, res, next) {
-  req.getConnection(function (error, conn) {
-    conn.query(
-      "SELECT * FROM user ORDER BY Id ASC",
-      function (err, rows, fields) {
-        //if(err) throw err
-        if (err) {
-          req.flash("error", err);
-          res.render("user/list", {
-            title: "",
-            data: "",
-          });
-        } else {
-          // render to views/user/list.ejs template file
-          res.render("user/list", {
-            title: "",
-            data: rows,
-          });
+  if (req.session.loggedin) {
+    req.getConnection(function (error, conn) {
+      conn.query(
+        "SELECT * FROM user ORDER BY Id ASC",
+        function (err, rows, fields) {
+          //if(err) throw err
+          if (err) {
+            req.flash("error", err);
+            res.render("user/list", {
+              title: "",
+              data: "",
+            });
+          } else {
+            // render to views/user/list.ejs template file
+            res.render("user/list", {
+              title: "",
+              data: rows,
+            });
+          }
         }
-      }
-    );
-  });
+      );
+    });
+  } else {
+    req.flash("error", "Please login first!");
+    res.redirect("/login");
+  }
 });
 
 // SHOW ADD USER FORM
 app.get("/add", function (req, res, next) {
+  if (req.session.loggedin) {
+    res.render("user/add", {
+      title: "",
+      firstName: "",
+      lastName: "",
+      phone: "",
+      email: "",
+      cardId: "",
+      balance: "",
+    });
+  } else {
+    req.flash("error", "Please login first!");
+    res.redirect("/login");
+  }
   // render to views/user/add.ejs
-  res.render("user/add", {
-    title: "",
-    firstName: "",
-    lastName: "",
-    phone: "",
-    email: "",
-    cardId: "",
-    balance: "",
-  });
 });
 
 // ADD NEW USER POST ACTION
@@ -89,7 +99,6 @@ app.post("/add", function (req, res, next) {
           });
         } else {
           req.flash("success", "User added successfully!");
-
           // render to views/user/add.ejs
           res.render("user/add", {
             title: "",
@@ -129,41 +138,46 @@ app.post("/add", function (req, res, next) {
 
 // SHOW EDIT USER FORM
 app.get("/edit/(:Id)", function (req, res, next) {
-  req.getConnection(function (error, conn) {
-    conn.query(
-      "SELECT * FROM user WHERE Id = ?",
-      [req.params.Id],
-      function (err, rows, fields) {
-        if (err) throw err;
+  if (req.session.loggedin) {
+    req.getConnection(function (error, conn) {
+      conn.query(
+        "SELECT * FROM user WHERE Id = ?",
+        [req.params.Id],
+        function (err, rows, fields) {
+          if (err) throw err;
 
-        // if user not found
-        if (rows.length <= 0) {
-          req.flash("error", "User not found with id = " + req.params.Id);
-          res.redirect("/user");
-        } else {
-          // if user found
-          // render to views/user/edit.ejs template file
-          res.render("user/edit", {
-            title: "",
-            //data: rows[0],
-            Id: rows[0].Id,
-            firstName: rows[0].firstName,
-            lastName: rows[0].lastName,
-            phone: rows[0].phone,
-            email: rows[0].email,
-            cardId: rows[0].cardId,
-            balance: rows[0].balance,
-          });
+          // if user not found
+          if (rows.length <= 0) {
+            req.flash("error", "User not found with id = " + req.params.Id);
+            res.redirect("/user");
+          } else {
+            // if user found
+            // render to views/user/edit.ejs template file
+            res.render("user/edit", {
+              title: "",
+              //data: rows[0],
+              Id: rows[0].Id,
+              firstName: rows[0].firstName,
+              lastName: rows[0].lastName,
+              phone: rows[0].phone,
+              email: rows[0].email,
+              cardId: rows[0].cardId,
+              balance: rows[0].balance,
+            });
+          }
         }
-      }
-    );
-  });
+      );
+    });
+  } else {
+    req.flash("success", "Please login first!");
+    res.redirect("/login");
+  }
 });
 
 // EDIT USER POST ACTION
 app.put("/edit/(:Id)", function (req, res, next) {
   req.assert("firstName", "First Name is required").notEmpty();
-  req.assert("lastName", "Last Name is required").notEmpty(); //Validate all
+  req.assert("lastName", "Last Name is required").notEmpty();
   req.assert("phone", "Phone is required").notEmpty();
   req.assert("email", "A valid email is required").isEmail();
   req.assert("cardId", "Card ID is required").notEmpty();
@@ -203,7 +217,7 @@ app.put("/edit/(:Id)", function (req, res, next) {
 
             // render to views/user/add.ejs
             res.render("user/edit", {
-              title: "Edit User",
+              title: "",
               Id: req.params.Id,
               firstName: req.body.firstName,
               lastName: req.body.lastName,
@@ -217,7 +231,7 @@ app.put("/edit/(:Id)", function (req, res, next) {
 
             // render to views/user/edit.ejs
             res.render("user/edit", {
-              title: "Edit User",
+              title: "",
               Id: req.params.Id,
               firstName: req.body.firstName,
               lastName: req.body.lastName,
@@ -243,7 +257,7 @@ app.put("/edit/(:Id)", function (req, res, next) {
      * because req.param('name') is deprecated
      */
     res.render("user/edit", {
-      title: "Edit User",
+      title: "",
       Id: req.params.Id,
       firstName: req.body.firstName,
       lastName: req.body.lastName,

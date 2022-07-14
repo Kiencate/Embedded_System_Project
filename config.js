@@ -1,11 +1,12 @@
 var config = {
   database: {
-    host: "localhost", // database host
-    user: "root", // database username
-    password: "Truonghtbn222", // database password
-    port: 3306, // default MySQL port
-    db: "hust", // database name
+    host: "localhost",
+    user: "root",
+    password: "Truonghtbn222",
+    port: 3306,
+    db: "hust",
   },
+  port: 4000,
 };
 
 module.exports = config;

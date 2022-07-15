@@ -16,20 +16,21 @@ CREATE DATABASE /*!32312 IF NOT EXISTS*/`hust` /*!40100 DEFAULT CHARACTER SET ut
 
 USE `hust`;
 
-/*Table structure for table `admin` */
+/*Table structure for table `account` */
 
-DROP TABLE IF EXISTS `admin`;
+DROP TABLE IF EXISTS `account`;
 
-CREATE TABLE `admin` (
+CREATE TABLE `account` (
   `admin` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   `password` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
-  PRIMARY KEY (`admin`)
+  PRIMARY KEY (`admin`),
+  UNIQUE KEY `admin` (`admin`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
-/*Data for the table `admin` */
+/*Data for the table `account` */
 
-insert  into `admin`(`admin`,`password`) values 
-('admin','admin');
+insert  into `account`(`admin`,`password`) values 
+('hqtruong','010200');
 
 /*Table structure for table `atm` */
 
@@ -44,7 +45,10 @@ CREATE TABLE `atm` (
 /*Data for the table `atm` */
 
 insert  into `atm`(`Id`,`Location`) values 
-('101','Bach Khoa');
+('101','Bach Khoa'),
+('102','Vinschool'),
+('103','Honda'),
+('104','Vinfast');
 
 /*Table structure for table `battery` */
 
@@ -52,14 +56,16 @@ DROP TABLE IF EXISTS `battery`;
 
 CREATE TABLE `battery` (
   `Id` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
-  `unitPrice` int unsigned NOT NULL,
+  `capacity` int unsigned NOT NULL COMMENT 'mAh',
+  `unitPrice` int unsigned NOT NULL COMMENT '/ 1%',
   PRIMARY KEY (`Id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 /*Data for the table `battery` */
 
-insert  into `battery`(`Id`,`unitPrice`) values 
-('10v',10000);
+insert  into `battery`(`Id`,`capacity`,`unitPrice`) values 
+('12v',12000,500),
+('24V',20000,1000);
 
 /*Table structure for table `payment` */
 
@@ -70,9 +76,8 @@ CREATE TABLE `payment` (
   `userId` int unsigned NOT NULL,
   `atmId` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   `batteryId` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
-  `amount` int unsigned DEFAULT '1',
+  `capacity` int unsigned NOT NULL COMMENT '%',
   `totalPrice` int unsigned NOT NULL,
-  `time` datetime NOT NULL ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`Id`),
   KEY `payment_ibfk_2` (`atmId`),
   KEY `typeOfBattery` (`batteryId`),
@@ -80,12 +85,12 @@ CREATE TABLE `payment` (
   CONSTRAINT `payment_ibfk_2` FOREIGN KEY (`atmId`) REFERENCES `atm` (`Id`),
   CONSTRAINT `payment_ibfk_3` FOREIGN KEY (`batteryId`) REFERENCES `battery` (`Id`),
   CONSTRAINT `payment_ibfk_4` FOREIGN KEY (`userId`) REFERENCES `user` (`Id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 /*Data for the table `payment` */
 
-insert  into `payment`(`Id`,`userId`,`atmId`,`batteryId`,`amount`,`totalPrice`,`time`) values 
-(1,1,'101','10v',1,10000,'2022-07-01 17:26:11');
+insert  into `payment`(`Id`,`userId`,`atmId`,`batteryId`,`capacity`,`totalPrice`) values 
+(1,1,'101','12v',10,5000);
 
 /*Table structure for table `user` */
 
@@ -99,16 +104,16 @@ CREATE TABLE `user` (
   `email` varchar(50) NOT NULL,
   `cardId` varchar(50) NOT NULL,
   `balance` int unsigned DEFAULT '0',
-  PRIMARY KEY (`Id`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  PRIMARY KEY (`Id`),
+  UNIQUE KEY `cardId` (`cardId`)
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 /*Data for the table `user` */
 
 insert  into `user`(`Id`,`firstName`,`lastName`,`phone`,`email`,`cardId`,`balance`) values 
-(1,'ha','quang truong','0395870206','hatruong2k31@gmail.com','20182843',100000),
-(2,'vu','duc kien','0369650673','hatruong2k31@gmail.com','20182620',100000),
-(3,'tran','viet long','0001112222','hatruong2k31@gmail.com','20180000',100000),
-(7,'ha','quangtruong','0395870206','hatruong2k31@gmail.com','20182844',100000);
+(1,'Truong','Ha Quang','0395870206','truong.hq182843@sis.hust.edu.vn','105.141.167.178',100000),
+(2,'Kien','Vu Duc','0369650673','kien.vd182620@sis.hust.edu.vn','0.130.176.26',100000),
+(3,'Long','Tran Viet','0001112222','long.vl182669@sis.hust.edu.vn','0.130.176.28',100000);
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;

@@ -169,7 +169,7 @@ app.get("/edit/(:Id)", function (req, res, next) {
       );
     });
   } else {
-    req.flash("success", "Please login first!");
+    req.flash("error", "Please login first!");
     res.redirect("/login");
   }
 });

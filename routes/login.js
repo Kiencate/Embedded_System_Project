@@ -1,6 +1,6 @@
 var express = require("express");
 var app = express();
-var session = require("express-session")
+var session = require("express-session");
 
 // Show Login form
 app.get("/", function (req, res, next) {
@@ -70,8 +70,8 @@ app.post("/auth", function (req, res, next) {
 
 // Show Logout
 app.get("/logout", function (req, res) {
-  req.session.destroy(null);
   req.flash("success", "Login Again Here");
+  req.session.destroy(null);
   res.redirect("/login");
 });
 

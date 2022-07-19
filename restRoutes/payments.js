@@ -11,7 +11,7 @@ app.post("/add", function (req, res, next) {
       userId: req.sanitize("userId").escape().trim(),
       atmId: req.sanitize("atmId").escape().trim(),
       batteryId: req.sanitize("batteryId").escape().trim(),
-      amount: req.sanitize("amount").escape().trim(),
+      capacity: req.sanitize("capacity").escape().trim(),
       totalPrice: req.sanitize("totalPrice").escape().trim(),
     };
 

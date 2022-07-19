@@ -1,0 +1,57 @@
+<%- include ../layouts/header.ejs %> <% if (messages.error) { %>
+<p style="color: red"><%- messages.error %></p>
+<% } %> <% if (messages.success) { %>
+<p style="color: green"><%- messages.success %></p>
+<% } %>
+
+<div style="text-align: center">
+  <h1>Payment History</h1>
+</div>
+
+<!-- table -->
+<div class="mx-auto mt-4">
+  <table style="text-align: center" class="mx-auto" width="70%" border="1">
+    <tr style="text-align: center; background-color: rgb(77, 177, 77)">
+      <th>ID</th>
+      <th>User ID</th>
+      <th>ATM ID</th>
+      <th>Battery ID</th>
+      <th>Capacity</th>
+      <th>Price</th>
+      <th>time</th>
+    </tr>
+
+    <!--
+        Using FOREACH LOOP for the battery array
+                
+        myArray.forEach(function(el, index) {
+          // el - current element, i - index
+          });
+        -->
+    <% if (data) { %> <% data.forEach(function(payment){ %>
+    <tr>
+      <td><%= payment.Id %></td>
+      <td><%= payment.userId %></td>
+      <td><%= payment.atmId %></td>
+      <td><%= payment.batteryId %></td>
+      <td><%= payment.capacity %></td>
+      <td><%= payment.totalPrice %></td>
+      <td><%= payment.time %></td>
+    </tr>
+    <% }) %> <% } %>
+  </table>
+</div>
+<style>
+  * {
+    box-sizing: border-box;
+    font-family: -apple-system, BlinkMacSystemFont, "segoe ui", roboto, oxygen,
+      ubuntu, cantarell, "fira sans", "droid sans", "helvetica neue", Arial,
+      sans-serif;
+    font-size: 16px;
+  }
+  body {
+    background-color: #d5d2db;
+  }
+</style>
+
+<%- include ../layouts/footer.ejs %>

@@ -57,9 +57,9 @@ app.use(cookieParser("keyboard cat"));
 app.use(
   session({
     secret: "keyboard cat",
-    resave: false,
+    resave: true,
     saveUninitialized: true,
-    cookie: { maxAge: 60000 },
+    cookie: { maxAge: 3600000 },
   })
 );
 

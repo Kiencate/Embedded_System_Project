@@ -15,7 +15,7 @@ app.get("/", function (req, res, next) {
               data: "",
             });
           } else {
-            // render to views/user/list.ejs template file
+            // render to views/payment/list.ejs template file
             res.render("payment/list", {
               title: "",
               data: rows,

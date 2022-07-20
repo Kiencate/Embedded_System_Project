@@ -22,29 +22,19 @@
     <div>
       <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <a class="nav-link" href="/home">Home Page</a>
-        <button
-          class="navbar-toggler"
-          type="button"
-          data-toggle="collapse"
-          data-target="#navbarSupportedContent"
-          aria-controls="navbarSupportedContent"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
-        >
-          <span class="navbar-toggler-icon"></span>
         </button>
         <div class="navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav mr-auto">
-            <li class="nav-item active">
+            <li class="nav-item">
               <a class="nav-link" href="/user">User List</a>
             </li>
-            <li class="nav-item active">
+            <li class="nav-item">
               <a class="nav-link" href="/payment">Payment History</a>
             </li>
-            <li class="nav-item active">
+            <li class="nav-item">
               <a class="nav-link" href="/atm">ATM List</a>
             </li>
-            <li class="nav-item active">
+            <li class="nav-item">
               <a class="nav-link" href="/battery">Battery List</a>
             </li>
           </ul>
@@ -78,8 +68,8 @@
           Arial, sans-serif;
         font-size: 16px;
       }
-      
-      h1{
+
+      h1 {
         padding-top: 20px;
       }
       .h2-01 {
@@ -122,9 +112,9 @@
         display: grid;
         grid-template-columns: 50% 50%;
         /* background-color: white; */
-        gap: 30px;
-        margin-left: 1px;
-        margin-right: 1px;
+        /* gap: 30px; */
+        /* margin-left: 1px;
+        margin-right: 1px; */
       }
 
       header {
@@ -170,30 +160,37 @@
       .like-us {
         padding-top: 20px;
         background-color: rgb(168, 168, 168);
-        text-align: center;
+        text-align: left;
+        color: white;
       }
 
-      .grid-1 {
-        padding-top: 15px;
-        font-size: 1.1em;
+      .like-us p {
+        margin-left: 15px;
+        padding-bottom: 10px;
+        padding-top: 10px;
+      }
+      .like-us p:hover {
+        color: blue;
+      } 
+
+      .like-us a {
+        color: white;
       }
 
+      /* .like-us a:hover {
+        color: blue;
+      }
+      .like-us i:hover {
+        color: blue;
+      } */
       .HQT {
         color: black;
       }
 
       .on-bot {
-        opacity: 0.7;
+        opacity: 0.5;
         padding-bottom: 10px;
-        font-size: 0.9em;
-      }
-
-      small {
-        color: white;
-      }
-
-      i {
-        color: white;
+        font-size: 0.8em;
       }
 
       @media (max-width: 740px) {

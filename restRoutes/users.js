@@ -20,6 +20,7 @@ app.get("/", function (req, res) {
 //show json user by cardId
 app.get("/:cardId", function (req, res) {
   req.getConnection(function (error, conn) {
+    if (error) throw error;
     conn.query(
       "SELECT * FROM user WHERE cardId=?",
       req.params.cardId,
@@ -43,19 +44,12 @@ app.get("/:cardId", function (req, res) {
 
 // update balance
 app.put("/update", function (req, res) {
-  // req.send({ message: "balance = "+req.body.balance, });
-  console.log("he");
-  // var user = {
-  //   balance: req.sanitize("balance").escape().trim(),
-  // };
-
   req.getConnection(function (error, conn) {
     conn.query(
       "UPDATE user SET balance =? WHERE cardId =?",
       [req.body.balance, req.body.cardId],
-      
+
       function (error, results) {
-        console.log("lo");
         if (error) throw error;
 
         if (results.length < 1) {

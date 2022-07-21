@@ -1,7 +1,6 @@
 var express = require("express");
 var app = express();
 
-
 var mysql = require("mysql");
 var myConnection = require("express-myconnection");
 
@@ -16,23 +15,15 @@ var db = {
 
 app.use(myConnection(mysql, db, "pool"));
 
-
 app.set("view engine", "ejs");
-
-
-var users = require("./restRoutes/users");
-var payments = require("./restRoutes/payments");
-
 
 var expressValidator = require("express-validator");
 app.use(expressValidator());
-
 
 var bodyParser = require("body-parser");
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-
 
 var methodOverride = require("method-override");
 
@@ -46,7 +37,6 @@ app.use(
     }
   })
 );
-
 
 var flash = require("express-flash");
 var cookieParser = require("cookie-parser");
@@ -67,12 +57,13 @@ app.use(flash());
 
 // web
 var route = require("./routes");
-route(app)
+route(app);
 
 // rest
+var users = require("./restRoutes/users");
+var payments = require("./restRoutes/payments");
 app.use("/users", users);
 app.use("/payments", payments);
-
 
 app.listen(config.port, () => {
   console.log(`Example app listening on port ${config.port}`);

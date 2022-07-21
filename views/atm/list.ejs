@@ -7,11 +7,20 @@
 <!-- table -->
 <div class="mx-auto mt-4">
   <table style="text-align: center" class="mx-auto" width="30%" border="1">
-    <tr style="text-align: center; background-color: rgb(77, 177, 77)">
-      <th>ATM ID</th>
-      <th>Location</th>
-    </tr>
-
+    <thead>
+      <tr class="table" style="background-color: rgb(77, 177, 77)">
+        <th scope="col">ATM ID</th>
+        <th scope="col">Location</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% if (data) { %> <% data.forEach(function(atm){ %>
+      <tr>
+        <th scope="row"><%= atm.Id %></th>
+        <td><%= atm.Location %></td>
+      </tr>
+      <% }) %> <% } %>
+    </tbody>
     <!--
 		Using FOREACH LOOP for the atm array
 		
@@ -19,12 +28,6 @@
 			// el - current element, i - index
 		});
 	  -->
-    <% if (data) { %> <% data.forEach(function(atm){ %>
-    <tr>
-      <td><%= atm.Id %></td>
-      <td><%= atm.Location %></td>
-    </tr>
-    <% }) %> <% } %>
   </table>
 </div>
 

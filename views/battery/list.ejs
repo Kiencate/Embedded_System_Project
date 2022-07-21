@@ -11,12 +11,22 @@
 <!-- table -->
 <div class="mx-auto mt-4">
   <table style="text-align: center" class="mx-auto" width="40%" border="1">
-    <tr style="text-align: center; background-color: rgb(77, 177, 77)">
-      <th>Battery ID</th>
-      <th>Capacity</th>
-      <th>Unit Price (VND)</th>
-    </tr>
-
+    <thead>
+      <tr style="text-align: center; background-color: rgb(77, 177, 77)">
+        <th scope="col">Battery ID</th>
+        <th scope="col">Capacity</th>
+        <th scope="col">Unit Price (VND)</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% if (data) { %> <% data.forEach(function(battery){ %>
+      <tr>
+        <th scope="row"><%= battery.Id %></th>
+        <td><%= battery.capacity %></td>
+        <td><%= battery.unitPrice %></td>
+      </tr>
+      <% }) %> <% } %>
+    </tbody>
     <!--
     Using FOREACH LOOP for the battery array
             
@@ -24,13 +34,6 @@
       // el - current element, i - index
       });
     -->
-    <% if (data) { %> <% data.forEach(function(battery){ %>
-    <tr>
-      <td><%= battery.Id %></td>
-      <td><%= battery.capacity %></td>
-      <td><%= battery.unitPrice %></td>
-    </tr>
-    <% }) %> <% } %>
   </table>
 </div>
 

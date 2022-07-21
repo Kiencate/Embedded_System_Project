@@ -43,12 +43,12 @@ including header content which is common for all pages
 	-->
     <% if (data) { %> <% data.forEach(function(user){ %>
     <tr>
-      <td><%= user.Id %></td>
+      <th scope="col"><%= user.Id %></th>
       <td><%= user.firstName %></td>
       <td><%= user.lastName %></td>
       <td><%= user.phone %></td>
       <td><%= user.email %></td>
-      <td><%= user.cardId%></td>
+      <th scope="col"><%= user.cardId%></th>
       <td><%= user.balance %></td>
       <td>
         <div>

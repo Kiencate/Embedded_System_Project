@@ -30,7 +30,7 @@
         -->
     <% if (data) { %> <% data.forEach(function(payment){ %>
     <tr>
-      <td><%= payment.Id %></td>
+      <th scope="row"><%= payment.Id %></th>
       <td><%= payment.userId %></td>
       <td><%= payment.atmId %></td>
       <td><%= payment.batteryId %></td>
